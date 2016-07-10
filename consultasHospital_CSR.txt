@@ -1,0 +1,87 @@
+select nomDependencia from dependencia where nomDependencia = 'control interno'
+SELECT nomTipoEmpleado FROM empleado  where nomTipoEmpleado = 'El social'
+SELECT nomPermiso FROM `permiso` where nomPermiso ='Permiso B'
+
+
+2.- 
+
+
+SELECT nomPermiso,nomTipoEmpleado ,nomDependencia from dependencia 
+inner join empleado on dependencia.id_dependencia=empleado.id_dependencia
+inner join tipoempleado on tipoempleado.id_tipoempleado=empleado.id_tipoempleado
+inner join usuario on empleado.id_usuario=usuario.id_usuario
+inner join permisosxusuario on permisosxusuario.id_usuario=usuario.id_usuario
+inner join permiso on permiso.id_permiso=permisosxusuario.id_permiso
+where nomDependencia = 'control interno' and nomTipoEmpleado = 'El social' and nomPermiso ='Permiso A'
+
+
+UPDATE `hospital`.`permiso` SET `nomPermiso` = 'Permiso A' WHERE `permiso`.`nomPermiso` = 'Permiso A';
+UPDATE `hospital`.`permiso` SET `nomPermiso` = 'Permiso A' WHERE `permiso`.`nomPermiso` = 'Permiso D';
+UPDATE `hospital`.`permiso` SET `nomPermiso` = 'Permiso A' WHERE `permiso`.`nomPermiso` = 'Permiso A';
+  
+
+4.- 
+
+select nomTipoTratamiento,nomFormaDePago,cuenta.valor from formadepago
+inner join pago on formadepago.id_formadepago=pago.id_formadepago
+inner join factura on pago.id_Factura=factura.id_factura
+inner join cuenta on factura.id_factura=cuenta.id_factura
+inner join paciente on paciente.id_paciente=factura.id_paciente
+inner join historiaclinica on historiaclinica.id_historiaclinica=paciente.id_historiaclinica
+inner join tratamiento on tratamiento.id_historiaclinica=historiaclinica.id_historiaclinica
+inner join tipotratamiento on tipotratamiento.id_tipotratamiento=tratamiento.id_tratamiento
+where nomTipoTratamiento='Anticonceptivo' and nomFormaDePago='Contado' and cuenta.valor between 2500 and 6000
+
+
+UPDATE `hospital`.`cuenta` SET `valor` = '4500' WHERE `cuenta`.`id_cuenta` = 16;
+UPDATE `hospital`.`cuenta` SET `valor` = '2800' WHERE `cuenta`.`id_cuenta` = 55;
+UPDATE `hospital`.`cuenta` SET `valor` = '5500' WHERE `cuenta`.`id_cuenta` = 83;
+
+
+
+5.-
+select id_pago, nomTipoTratamiento,cuenta.valor,fechaPago,contenido from dieta
+inner join historiaclinica on historiaclinica.id_historiaclinica=dieta.id_historiaclinica 
+inner join tratamiento on tratamiento.id_historiaclinica=historiaclinica.id_historiaclinica  
+inner join tipotratamiento on tipotratamiento.id_tipotratamiento=tratamiento.id_tipotratamiento
+inner join paciente on paciente.id_historiaclinica=historiaclinica.id_historiaclinica
+inner join factura on factura.id_paciente=paciente.id_paciente
+inner join pago on factura.id_factura=pago.id_factura
+inner join cuenta on factura.id_factura=cuenta.id_factura
+where contenido='5 comidas al dia cada 3 horas rica en verdura' and nomTipoTratamiento='Anticonceptivo' and  fechaPago='2015-03-30 00:00:00' and cuenta.valor > 1000
+
+
+UPDATE `hospital`.`pago` SET `fechaPago` = '2015-03-30 00:00:00' WHERE `pago`.`id_pago` = 16;
+UPDATE `hospital`.`pago` SET `fechaPago` = '2015-03-30 00:00:00' WHERE `pago`.`id_pago` = 69;
+UPDATE `hospital`.`pago` SET `fechaPago` = '2015-03-30 00:00:00' WHERE `pago`.`id_pago` = 84;
+UPDATE `hospital`.`pago` SET `fechaPago` = '2015-03-30 00:00:00' WHERE `pago`.`id_pago` = 88;
+
+update cuenta set valor =1200 where id_cuenta = 16;
+update cuenta set valor =1200 where id_cuenta = 69;
+update cuenta set valor =1350 where id_cuenta = 84;
+update cuenta set valor =5850 where id_cuenta = 88;
+
+
+select avg(cuenta.valor), nomFormaDePago, contenido from cuenta
+inner join factura on cuenta.id_factura=factura.id_factura
+inner join pago on factura.id_factura=pago.id_factura
+inner join formadepago on formadepago.id_formadepago=pago.id_formadepago
+inner join paciente on paciente.id_paciente=factura.id_paciente
+inner join historiaclinica on historiaclinica.id_historiaclinica=paciente.id_historiaclinica
+inner join dieta on dieta.id_historiaclinica=historiaclinica.id_historiaclinica
+where contenido='Te compras un iphone 6 y no tienes para comer' and nomFormaDePago='cheque bancario'
+
+UPDATE `hospital`.`formadepago` SET `nomFormaDePago` = 'Cheque Bancario' WHERE `formadepago`.`id_formaDePago` = 1;
+
+
+
+10.- 
+select variance(id_tratamiento),fechaInicio from tratamiento where fechaInicio between'2010-01-01' and '2010-12-31'
+
+11.-
+select variance(examen.id_tipoExamen) from tipoexamen 
+inner join examen on examen.id_tipoexamen =tipoexamen.id_tipoexamen
+inner join historiaclinica on historiaclinica.id_historiaclinica=examen.id_historiaclinica 
+inner join dieta on dieta.id_historiaclinica=historiaclinica.id_historiaclinica
+where fechaAplicacion between '2011-01-01' and '2011-12-31' 
+and contenido='5 comidas al dia cada 3 horas rica en verdura'
